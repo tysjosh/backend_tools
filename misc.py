@@ -19,7 +19,6 @@ RE_ALPHA_DIGIT = re.compile(r'[^A-Za-z0-9]')
 RE_ALPHA = re.compile(r'[^A-Za-z]')
 RE_DIGIT = re.compile(r'[^0-9]')
 
-# Паттерн для фильтра указателей на объекты в сообщениях об ошибках
 RE_OBJECT_AT = re.compile(r'object\sat\s0x[0-9a-fA-F]+')
 
 

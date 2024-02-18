@@ -8,18 +8,14 @@ DEFAULT_SECTION = 'common'
 
 class ConfigEnv:
     def __init__(self):
-        # объект конфиги
         self._cfg = ConfigObj()
 
-        # пути к файлам конфиги
         self._root_path = ''
         self._file_cfg_global = self._root_path + 'etc/backend.cfg'
         self._file_cfg_local = self._root_path + 'etc/backend-local.cfg'
 
-        # имя секции среды
         self._sec_environment = None
 
-        # время изменения файлов конфигурации
         self._timestamp_cfg_global, self._timestamp_cfg_local = self._get_cfgs_update_time()
 
         self.reload()
