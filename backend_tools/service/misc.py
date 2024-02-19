@@ -8,7 +8,7 @@ def get_service_schema_name():
 
 
 def create_schema(conn_id, schema_name=_DB_SCHEMA, read_only_user=None):
-    """ Хелпер для создания сервисной схемы """
+    """ Helper to create a service scheme """
     _create_schema(conn_id, schema_name=schema_name, read_only_user=read_only_user)
 
 

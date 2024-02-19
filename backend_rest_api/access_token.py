@@ -17,7 +17,7 @@ from backend_rest_api.validators import CustomToken
 
 TOKEN_LENGTH = 64
 
-# коды 1 - 199 зарезервированы для авторизации
+# Codes 1 - 199 reserved for authorization
 ERR_AUTHORIZATION_FAILED = http_error(100, 'Authorization failed', 401)
 ERR_ACCESS_TOKEN_EXPIRED = http_error(101, 'Access token expired', 401)
 ERR_REFRESH_TOKEN_EXPIRED = http_error(102, 'Refresh token expired', 401)
@@ -41,8 +41,8 @@ class Token(AbstractORMObject):
 
 def tokens_get(conn_id, access=None, refresh=None):
     """
-    Возвращает Token по указанному access ИЛИ refresh
-    :return: объект Token или None, если не найден
+    Returns token by specified Access or Refresh 
+     :return: Token or None object if not found
     """
     if not access and not refresh:
         return None
@@ -66,8 +66,8 @@ def tokens_get(conn_id, access=None, refresh=None):
 
 def tokens_create(conn_id, user_id, commit=True):
     """
-    Создает новый объект токена, сохраняет в базе
-    :return: объект Token
+    Creates a new token object, preserves in the database 
+    :return: Token object
     """
     refresh = generate_token(token_length=TOKEN_LENGTH)
     refresh_expiration = datetime.utcfromtimestamp(time() + TTL_REFRESH_TOKEN)
@@ -86,7 +86,7 @@ def tokens_create(conn_id, user_id, commit=True):
 
 def tokens_delete(conn_id, user_id=None, access=None, refresh=None, commit=True):
     """
-    Удаление токена по любому из указанных параметров
+    Removing token according to any of these parameters
     :param conn_id:
     :param user_id:
     :param access:
@@ -113,10 +113,10 @@ def tokens_delete(conn_id, user_id=None, access=None, refresh=None, commit=True)
 @raise_controller_error
 def check_access_token(conn_id, access):
     """
-    Проверяет доступ по токену, возвращает user_id, если передан корректный токен.
+    Checks access to token, returns user_id if the correct token is transferred.
     :param conn_id: 
     :param access: access_token
-    :return: user_id ИЛИ Ошибка "Access expired"
+    :return: user_id or error "Access Expired"
     """
     query = "SELECT user_id, access_expiration FROM {}.token WHERE access = %s".format(DB_SCHEMA)
     row, _ = execute_query_env(conn_id, query=query, params=[access], single_row=True)
@@ -133,12 +133,12 @@ def check_access_token(conn_id, access):
 @raise_controller_error
 def refresh_tokens(conn_id, refresh, log_fn=debug):
     """
-    Генерирует новую пару токенов, если передан корректный refresh.
-    Прежний (или просроченный) токен удаляется.
+    Generates a new couple of tokens if the correct Refresh is transmitted. 
+    The previous (or expired) token is removed.
     :param conn_id: 
     :param refresh: refresh_token
     :param log_fn:
-    :return: Token ИЛИ Ошибка "Refresh expired"
+    :return: Token or error "Refresh Expired"
     """
     query = "SELECT user_id, refresh_expiration FROM {}.token WHERE refresh = %s".format(DB_SCHEMA)
     row, _ = execute_query_env(conn_id, query=query, params=[refresh], single_row=True)
@@ -158,7 +158,7 @@ def refresh_tokens(conn_id, refresh, log_fn=debug):
 
 def clear_expired_tokens(conn_id):
     """
-    Удаляет токены, у которых просрочена refresh_expiration
+    Removes tokens in which Refresh_expiration is expired
     """
     query = "DELETE FROM {}.token WHERE refresh_expiration < %s".format(DB_SCHEMA)
     execute_query_env(conn_id, query=query, params=[datetime.utcnow()])
@@ -166,7 +166,7 @@ def clear_expired_tokens(conn_id):
 
 def clear_all_tokens(conn_id, commit=True):
     """
-    Очищает таблицу токенов
+    Cleans the table of tokens
     """
     data, _ = execute_query_env(conn_id, query="DELETE FROM {}.token RETURNING 1".format(DB_SCHEMA), commit=commit)
     return len(data)
@@ -174,7 +174,7 @@ def clear_all_tokens(conn_id, commit=True):
 
 def get_access_token_user_map(conn_id):
     """
-    Возвращает dict token -> user_id
+    Returns dict token -> user_id
     """
     q = "SELECT access, user_id FROM {0}.token"
     token_user, _ = execute_query_env(conn_id, query=q.format(DB_SCHEMA))
@@ -183,10 +183,10 @@ def get_access_token_user_map(conn_id):
 
 def remove_rabbidz(conn_id, allowed_count):
     """
-    Удаляет свежие токены пользователей, если их количество привысило допустимое значение
+    Deletes fresh user tokens if their number exceeds the allowed value
     :param conn_id: 
-    :param allowed_count: допустимое значение одновременных сессий пользователей
-    :return: кол-во удаленных токенов
+    :param allowed_count: allowed value of concurrent user sessions
+    :return: number of tokens removed
     """
     query = """
         WITH rabbidz as (
@@ -204,7 +204,7 @@ def remove_rabbidz(conn_id, allowed_count):
 
 def init_access_token(conn_id, commit=True):
     """
-    Инициализация таблицы mail_queue в БД
+    Initializing the table in the database
     :param conn_id: 
     :param commit: 
     """
@@ -226,12 +226,12 @@ def init_access_token(conn_id, commit=True):
     execute_query_env(conn_id, query=query, fetch_result=False, commit=commit)
 
 
-# Имя схемы
+# Schema name
 DB_SCHEMA = cfg_value('db_schema_access_token', default='service')
 
-# Время жизни access_token
+# lifetime access_token
 TTL_ACCESS_TOKEN = cfg_value('ttl_access_token', cast=int, default=3600)
-# Время жизни refresh_token
+# lifetime refresh_token
 TTL_REFRESH_TOKEN = cfg_value('ttl_refresh_token', cast=int, default=3600 * 24 * 60)
 
 

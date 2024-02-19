@@ -12,13 +12,13 @@ DEF_TOKEN_LENGTH = 16
 
 def generate_token(token_length=DEF_TOKEN_LENGTH, base=16, reverse=False, altchars=b'-_'):
     """
-    Создает confirm token по принципу:
-        source = "<текущее время X байт>" + "<рандомный набор Y байт>" => base64
-    :param token_length: длина токена, x <= 16
-    :param base: формат токена, один из [16, 32, 64]
-    :param reverse: флаг выполнения .reverse() для токена 
-    :param altchars: доп. символы для base64
-    :return: сгенерированный token
+    Creates confirm token according to the principle: 
+        Source = "<The current time x byte>" + "<random set y byt>" => basy64 
+    : param token_length: token length, x <= 16 
+    : Param Base: Token format, one of [16, 32, 64] 
+    : Param Reverse: Flag Fulfillment .reverse () for token 
+    : Param altchars: additional. Symbols for Base64 
+    : return: generated token
     """
     base = base if base in [16, 32, 64] else 16
     token_length = 16 if token_length < 16 else token_length
@@ -44,6 +44,6 @@ def generate_token(token_length=DEF_TOKEN_LENGTH, base=16, reverse=False, altcha
 
 def is_token_valid(token, length=DEF_TOKEN_LENGTH):
     """
-    Проверка token на соответствие допустимому набору символов
+    Token check for compliance with the permissible set of characters
     """
     return isinstance(token, str) and len(token) == length and re.match(RE_ABSTRACT_TOKEN, token) is not None

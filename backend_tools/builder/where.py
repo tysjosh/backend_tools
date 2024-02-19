@@ -106,9 +106,9 @@ class Expr(object):
                 result_expr = replace_expr | other if self.empty else self | replace_expr
             sql = str(result_expr)
         else:
-            # AND и OR имеют наименьший приоритет по сравнению с любыми другими операторами
-            # Поэтому скобочки рядом с ними нужны только если комбинируется AND и OR,
-            # а также в случае передачи сырого запроса
+            # And or or have the smallest priority compared to any other operators 
+            # Therefore, brackets next to them are needed only if combined and or or, 
+            # and also in the case of the transmission of a raw request
             left_par = '({})' if self._op == 'raw' or {self._op, op} == {'AND', 'OR'} else '{}'
             right_par = '({})' if other._op == 'raw' or {other._op, op} == {'AND', 'OR'} else '{}'
             sql = '{} {} {}'.format(left_par, '{}', right_par).format(self, op, other)
@@ -468,11 +468,11 @@ def or_wheres(left_where: Optional[callable], right_where: Optional[callable]) -
 
 def create_nullable_where_in(tab) -> callable:
     """
-    Возвращает аналог `(field1, field2) IN ((value1, value2),(value3, value4))` для Nullable полей
-    Имена полей берутся из столбцов табуляра. Значения - из строк
-    Вернёт FALSE если передать пустой табуляр
-    :param tab: Tabular
-    :return: callable
+    Returns an analogue `(Field1, Field2) in ((Value1, Value2), (Value3, Value4))` for nullable fields 
+    the names of the fields are taken from the columns of the tabular. Values - from lines 
+    will return FALSE if you transfer an empty tabular 
+     : Param Tab: Tabular 
+     : Return: Callable
     """
     def one_col(col_name, value):
         return lambda t: (getattr(t, col_name) == value if value is not None else getattr(t, col_name).isnull())

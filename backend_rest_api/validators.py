@@ -54,11 +54,11 @@ class CustomToken(t.String):
 
 class CustomEnum(t.Trafaret):
     """
-    Enum с автоматической пре-конвертацией входного значения.
-    Если Enum содержит список однотипных значений - делается попытка конвертировать
-        входящий параметр в этот тип перед валидацией
+    ENUM with automatic pre-control of the input value. 
+    If Enum contains a list of the same type of values, an attempt is made to convert 
+    incoming parameter in this type before validation 
 
-    Поддерживаемые типы: int, float
+    Supported types: Int, Float
     """
     __slots__ = ['variants']
 
@@ -94,9 +94,7 @@ class CustomEnum(t.Trafaret):
 
 
 class CustomString(t.String):
-    """
-    t.String с опцией предвраительного вызова str.strip()
-    """
+
     def __init__(self, allow_blank=False, min_length=None, max_length=None, pre_strip=None):
         super().__init__(allow_blank=allow_blank, min_length=min_length, max_length=max_length)
         self.pre_strip = bool(pre_strip)
@@ -117,8 +115,8 @@ class StripString(CustomString):
 
 class Date(t.String):
     """
-    t.String представляющий из себя дату (YYYY-MM-DD)
-    Конвертирует ее в datetime.date
+    t.String is a date (yyyy-mm-dd) 
+    converts it into datetime.date
     """
     def __init__(self, fmt='%Y-%m-%d'):
         super().__init__(allow_blank=False)

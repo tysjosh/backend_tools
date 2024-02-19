@@ -43,8 +43,8 @@ def confirm_token_create(conn_id, user_id, token=None, token_type=TOKEN_EMAIL_CO
 
 def confirm_token_get(conn_id, user_id=None, token=None, token_type=None, single=False):
     """
-    Выборка токенов по известным данным.
-    Если single=True - возвращается первый найденный.
+    Sample of tokens according to well -known data. 
+    If Single = True, the first found is returned.
     """
     select_columns = ['user_id', 'token', 'type', 'created_at']
     query_columns = []
@@ -92,8 +92,8 @@ def confirm_token_get(conn_id, user_id=None, token=None, token_type=None, single
 
 def confirm_token_delete(conn_id, user_id=None, token=None, token_type=None, commit=True):
     """
-    Удаление токенов по известным данным. Возвращает кол-во удаленных токенов.
-    Если не было удалено ни одного токена - ошибка.
+    Removing tokens according to well -known data. Returns the number of remote tokens. 
+    If not a single token was removed, a mistake.
     """
     query_columns = []
     query_params = []
@@ -155,7 +155,7 @@ def get_new_user_token(conn_id, token, single=True):
 
 def init_confirm_token(conn_id, commit=True):
     """
-    Инициализация таблицы mail_queue в БД
+    Initialization of the table in the database
     :param conn_id:
     :param commit:
     """
