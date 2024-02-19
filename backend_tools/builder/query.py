@@ -2,25 +2,25 @@ from typing import List, Dict, Tuple
 
 
 def _build_where(where_clause: str) -> str:
-    """ Хелпер для построения {where} """
+    """ Helper for building {where} """
     return ' WHERE {}'.format(where_clause) if where_clause else ''
 
 
 def _build_returning(returning: List) -> str:
-    """ Хелпер для построения {returning} """
+    """ Helper for building {returning} """
     return ' RETURNING {}'.format(','.join(returning)) if returning else ''
 
 
 def _build_order(order_by: List, desc: bool) -> str:
     """
-    Хелпер для построения {order}
+    Helper for building {order}
     WARNING: desc arg is DEPRECATED, use direction in `order_by`. example: order_by = ['f1 ASC', 'f2 DESC']
     """
     return ' ORDER BY {} {}'.format(', '.join(order_by), 'DESC' if desc else '') if order_by else ''
 
 
 def _build_group(group_by: List) -> str:
-    """ Хелпер для построения {group} """
+    """ Helper for building {group} """
     return ' GROUP BY {}'.format(','.join(group_by)) if group_by else ''
 
 
